@@ -6,9 +6,9 @@ import { computed, onMounted, reactive, ref } from "vue";
 
 export function useCacheConfig() {
   const form = reactive({
-    cache_name: "",
-    sql_template: "",
-    enabled: ""
+    cache_name: null,
+    sql_template: null,
+    enabled: null
   });
   const editFormDialogVisible = ref(false);
   const editFormData = ref({});
@@ -182,7 +182,12 @@ export function useCacheConfig() {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getCacheConfigList();
+    const reqParam = {
+      pageNo: pagination.currentPage,
+      pageSize: pagination.pageSize
+    };
+    Object.assign(reqParam, form);
+    const { data } = await getCacheConfigList(reqParam);
     dataList.value = data.list;
     pagination.total = data.total;
     setTimeout(() => {
