@@ -24,6 +24,7 @@ buttons:
   hscontentExitFullScreen: Content ExitFullScreen
 menus:
   hshome: Home
+  hscache_config: Cache Config
   hslogin: Login
   hsabnormal: Abnormal Page
   hsfourZeroFour: "404"
