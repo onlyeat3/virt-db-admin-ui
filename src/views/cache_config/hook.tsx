@@ -183,8 +183,10 @@ export function useCacheConfig() {
   async function onSearch() {
     loading.value = true;
     const reqParam = {
-      pageNo: pagination.currentPage,
-      pageSize: pagination.pageSize
+      pageParam: {
+        pageNo: pagination.currentPage,
+        pageSize: pagination.pageSize
+      }
     };
     Object.assign(reqParam, form);
     const { data } = await getCacheConfigList(reqParam);
