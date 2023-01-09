@@ -25,7 +25,7 @@ export const getCacheConfigList = (data?: object) => {
   });
 };
 
-/** 获取缓存配置列表 */
+/** 新增或修改缓存配置 */
 export const createOrUpdateCacheConfig = (data?: object) => {
   return http.request<Result>("post", "/cache_config/createOrUpdate", {
     data
