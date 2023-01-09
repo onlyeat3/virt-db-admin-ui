@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import { message } from "@/utils/message";
 import { FormInstance } from "element-plus";
+import { createOrUpdateCacheConfig } from "@/api/system";
 
 const status_options = [
   {
@@ -35,9 +36,16 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate(valid => {
     if (valid) {
-      message("提交成功", { type: "success" });
-      formVisible.value = false;
-      resetForm(formEl);
+      const req_param = {};
+      Object.assign(req_param, formData.value);
+      createOrUpdateCacheConfig(req_param).then(result => {
+        console.log("result", result);
+        if (result.success) {
+          message("提交成功", { type: "success" });
+          formVisible.value = false;
+          resetForm(formEl);
+        }
+      });
     }
   });
 };
@@ -103,7 +111,7 @@ const rules = {
       </el-form-item>
       <el-form-item label="有效时长(秒)" prop="duration">
         <el-input
-          v-model="formData.duration"
+          v-model.number="formData.duration"
           :style="{ width: '480px' }"
           placeholder="请输入缓存时长"
         />

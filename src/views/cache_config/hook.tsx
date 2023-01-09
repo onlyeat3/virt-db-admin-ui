@@ -163,13 +163,11 @@ export function useCacheConfig() {
   function handleUpdate(row) {
     editFormDialogVisible.value = true;
     editFormData.value = row;
-    console.log(row);
   }
 
   function handleAdd() {
     editFormDialogVisible.value = true;
     editFormData.value = {};
-    console.log(editFormData);
   }
 
   function handleDelete(row) {

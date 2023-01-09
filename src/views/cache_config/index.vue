@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { PureTableBar } from "@/components/RePureTableBar";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import dialogForm from "./DialogForm.vue";
 import { useCacheConfig } from "./hook";
 
@@ -33,6 +33,13 @@ const {
   handleCurrentChange,
   handleSelectionChange
 } = useCacheConfig();
+
+watch(
+  () => editFormDialogVisible.value,
+  _ => {
+    onSearch();
+  }
+);
 </script>
 
 <template>

@@ -24,3 +24,10 @@ export const getCacheConfigList = (data?: object) => {
     data
   });
 };
+
+/** 获取缓存配置列表 */
+export const createOrUpdateCacheConfig = (data?: object) => {
+  return http.request<Result>("post", "/cache_config/createOrUpdate", {
+    data
+  });
+};
