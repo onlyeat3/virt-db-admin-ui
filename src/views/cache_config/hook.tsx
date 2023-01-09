@@ -52,17 +52,25 @@ export function useCacheConfig() {
     {
       label: "SQL template",
       prop: "sql_template",
-      minWidth: 80,
-      cellRenderer: scope => (
-        <el-tooltip
-          class="box-item"
-          effect="dark"
-          content={scope.row.sql_template}
-          placement="top-start"
-        >
-          {scope.row.sql_template?.substring(0, 80) + "..."}
-        </el-tooltip>
-      )
+      minWidth: 200,
+      cellRenderer: scope => {
+        let text = scope.row.sql_template;
+        if (scope.row.sql_template && scope.row.sql_template.length > 10) {
+          text = scope.row.sql_template.slice(0, 80) + "...";
+        }
+        console.log(text);
+
+        return (
+          <el-tooltip
+            class="box-item"
+            effect="dark"
+            content={scope.row.sql_template}
+            placement="top-start"
+          >
+            <div style="min-width:100px;">{text}</div>
+          </el-tooltip>
+        );
+      }
     },
     {
       label: "创建时间",
