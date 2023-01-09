@@ -135,7 +135,7 @@ watch(
               >
                 修改
               </el-button>
-              <el-popconfirm title="是否确认删除?">
+              <el-popconfirm title="是否确认删除?" @confirm="handleDelete(row)">
                 <template #reference>
                   <el-button
                     class="reset-margin"
@@ -143,7 +143,6 @@ watch(
                     type="primary"
                     :size="size"
                     :icon="useRenderIcon(Delete)"
-                    @click="handleDelete(row)"
                   >
                     删除
                   </el-button>
@@ -154,7 +153,11 @@ watch(
         </template>
       </PureTableBar>
     </div>
-    <dialogForm v-model:visible="editFormDialogVisible" :data="editFormData" />
+    <dialogForm
+      v-model:visible="editFormDialogVisible"
+      :data="editFormData"
+      :on-success="onSearch"
+    />
   </div>
 </template>
 

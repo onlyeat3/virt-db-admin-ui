@@ -1,4 +1,4 @@
-import { getCacheConfigList } from "@/api/system";
+import { getCacheConfigList, deleteCacheConfig } from "@/api/system";
 import { message } from "@/utils/message";
 import { type PaginationProps } from "@pureadmin/table";
 import { ElMessageBox } from "element-plus";
@@ -58,7 +58,6 @@ export function useCacheConfig() {
         if (scope.row.sql_template && scope.row.sql_template.length > 10) {
           text = scope.row.sql_template.slice(0, 80) + "...";
         }
-        console.log(text);
 
         return (
           <el-tooltip
@@ -170,8 +169,9 @@ export function useCacheConfig() {
     editFormData.value = {};
   }
 
-  function handleDelete(row) {
-    console.log(row);
+  async function handleDelete(row) {
+    const _ = await deleteCacheConfig(row);
+    onSearch();
   }
 
   function handleSizeChange(val: number) {
@@ -200,7 +200,7 @@ export function useCacheConfig() {
     pagination.total = data.total;
     setTimeout(() => {
       loading.value = false;
-    }, 500);
+    }, 200);
   }
 
   const resetForm = formEl => {

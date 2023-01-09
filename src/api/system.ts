@@ -31,3 +31,10 @@ export const createOrUpdateCacheConfig = (data?: object) => {
     data
   });
 };
+
+/** 删除缓存配置 */
+export const deleteCacheConfig = (data?: object) => {
+  return http.request<Result>("post", "/cache_config/delete", {
+    data
+  });
+};

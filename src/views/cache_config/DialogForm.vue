@@ -19,6 +19,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  onSuccess: {
+    type: Function,
+    default: () => {}
+  },
   data: {
     type: Object,
     default: () => {
@@ -44,6 +48,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           message("提交成功", { type: "success" });
           formVisible.value = false;
           resetForm(formEl);
+          props.onSuccess();
         }
       });
     }
