@@ -1,5 +1,8 @@
-import { getCacheConfigList, deleteCacheConfig } from "@/api/system";
-import { message } from "@/utils/message";
+import {
+  createOrUpdateCacheConfig,
+  deleteCacheConfig,
+  getCacheConfigList
+} from "@/api/system";
 import { type PaginationProps } from "@pureadmin/table";
 import { ElMessageBox } from "element-plus";
 import { computed, onMounted, reactive, ref } from "vue";
@@ -141,7 +144,7 @@ export function useCacheConfig() {
             loading: true
           }
         );
-        setTimeout(() => {
+        createOrUpdateCacheConfig(row).then(() => {
           switchLoadMap.value[index] = Object.assign(
             {},
             switchLoadMap.value[index],
@@ -149,10 +152,8 @@ export function useCacheConfig() {
               loading: false
             }
           );
-          message("已成功修改状态", {
-            type: "success"
-          });
-        }, 300);
+          onSearch();
+        });
       })
       .catch(() => {
         row.status === 0 ? (row.status = 1) : (row.status = 0);
