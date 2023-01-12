@@ -58,7 +58,7 @@ export function useCacheConfig() {
       minWidth: 200,
       cellRenderer: scope => {
         let text = scope.row.sql_template;
-        if (scope.row.sql_template && scope.row.sql_template.length > 10) {
+        if (scope.row.sql_template && scope.row.sql_template.length > 80) {
           text = scope.row.sql_template.slice(0, 80) + "...";
         }
 
