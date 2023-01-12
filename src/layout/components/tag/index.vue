@@ -16,7 +16,6 @@ import Fullscreen from "@iconify-icons/ri/fullscreen-fill";
 import ArrowDown from "@iconify-icons/ri/arrow-down-s-line";
 import ArrowRightSLine from "@iconify-icons/ri/arrow-right-s-line";
 import ArrowLeftSLine from "@iconify-icons/ri/arrow-left-s-line";
-import CloseBold from "@iconify-icons/ep/close-bold";
 
 const {
   route,
@@ -537,7 +536,7 @@ onMounted(() => {
             class="el-icon-close"
             @click.stop="deleteMenu(item)"
           >
-            <IconifyIconOffline :icon="CloseBold" />
+            <!-- <IconifyIconOffline :icon="CloseBold" /> -->
           </span>
           <div
             :ref="'schedule' + index"
