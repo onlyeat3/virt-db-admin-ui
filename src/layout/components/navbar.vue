@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import Search from "./search/index.vue";
-import Notice from "./notice/index.vue";
-import mixNav from "./sidebar/mixNav.vue";
-import { useNav } from "@/layout/hooks/useNav";
-import Breadcrumb from "./sidebar/breadCrumb.vue";
-import topCollapse from "./sidebar/topCollapse.vue";
-import { useTranslationLang } from "../hooks/useTranslationLang";
 import globalization from "@/assets/svg/globalization.svg?component";
-import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import Setting from "@iconify-icons/ri/settings-3-line";
+import { useNav } from "@/layout/hooks/useNav";
 import Check from "@iconify-icons/ep/check";
+import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
+import { useTranslationLang } from "../hooks/useTranslationLang";
+import Search from "./search/index.vue";
+import Breadcrumb from "./sidebar/breadCrumb.vue";
+import mixNav from "./sidebar/mixNav.vue";
+import topCollapse from "./sidebar/topCollapse.vue";
 
 const {
   layout,
   device,
   logout,
-  onPanel,
   pureApp,
   username,
   avatarsStyle,
@@ -49,7 +46,7 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
       <!-- 菜单搜索 -->
       <Search />
       <!-- 通知 -->
-      <Notice id="header-notice" />
+      <!-- <Notice id="header-notice" /> -->
       <!-- 国际化 -->
       <el-dropdown id="header-translation" trigger="click">
         <globalization
@@ -103,13 +100,9 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <span
-        class="set-icon navbar-bg-hover"
-        :title="t('buttons.hssystemSet')"
-        @click="onPanel"
-      >
+      <!-- <span class="set-icon navbar-bg-hover" :title="t('buttons.hssystemSet')" @click="onPanel">
         <IconifyIconOffline :icon="Setting" />
-      </span>
+      </span> -->
     </div>
   </div>
 </template>
