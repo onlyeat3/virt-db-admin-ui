@@ -37,8 +37,15 @@
       >
         <template #header>
           <div class="card-header">
-            <div style="font-size: 12px; margin-right: 10px">
-              {{ option.durationChartOption.sqlStr }}
+            <div style="font-size: 10px; margin-right: 10px">
+              <el-popover placement="top" :width="1000">
+                <code>{{ option.durationChartOption.sqlStr }}</code>
+                <template #reference>
+                  <div class="hide-more">
+                    {{ option.durationChartOption.sqlStr }}
+                  </div>
+                </template>
+              </el-popover>
             </div>
             <el-button
               type="primary"
@@ -48,11 +55,11 @@
           </div>
         </template>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <v-chart class="chart" :option="option.durationChartOption" />
           </el-col>
           <el-divider />
-          <el-col :span="24">
+          <el-col :span="12">
             <v-chart class="chart" :option="option.countChartOption" />
           </el-col>
         </el-row>
@@ -254,7 +261,7 @@ refresh();
 
 .box-card {
   width: 400px;
-  height: 600px;
+  height: 560px;
   margin: 10px 13px 0 0px;
   border: 1px solid transparent;
 }
@@ -262,5 +269,12 @@ refresh();
 .card-container {
   display: flex;
   flex-wrap: wrap;
+}
+
+.hide-more {
+  width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
