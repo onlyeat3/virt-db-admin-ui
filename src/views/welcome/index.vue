@@ -55,11 +55,11 @@
           </div>
         </template>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <v-chart class="chart" :option="option.durationChartOption" />
           </el-col>
           <el-divider />
-          <el-col :span="12">
+          <el-col :span="24">
             <v-chart class="chart" :option="option.countChartOption" />
           </el-col>
         </el-row>
