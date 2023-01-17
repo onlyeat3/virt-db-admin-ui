@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { createOrUpdateCacheConfig } from "@/api/system";
 import { message } from "@/utils/message";
 import { FormInstance } from "element-plus";
-import { createOrUpdateCacheConfig } from "@/api/system";
+import { ref, watch } from "vue";
 
 const status_options = [
   {
@@ -88,7 +88,10 @@ watch(
 );
 
 const rules = {
-  cache_name: [{ required: true, message: "请输入缓存名称", trigger: "blur" }]
+  cache_name: [{ required: true, message: "请输入缓存名称", trigger: "blur" }],
+  duration: [{ required: true, message: "请输入缓存时长", trigger: "blur" }],
+  enabled: [{ required: true, message: "请选择状态", trigger: "blur" }],
+  sql_template: [{ required: true, message: "请输入SQL模板", trigger: "blur" }]
 };
 </script>
 
@@ -105,7 +108,7 @@ const rules = {
       ref="ruleFormRef"
       :model="formData"
       :rules="rules"
-      label-width="100px"
+      label-width="120px"
     >
       <el-form-item label="缓存名称" prop="cache_name">
         <el-input
@@ -134,6 +137,13 @@ const rules = {
           type="textarea"
           :style="{ width: '480px' }"
           placeholder="请输入SQL模板"
+        />
+        <el-alert
+          style="width: 480px; height: 30px; margin-top: 4px"
+          title="SQL模板支持SQL参数匹配.比如:select * from user where id = ?"
+          type="info"
+          show-icon
+          :closable="false"
         />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
