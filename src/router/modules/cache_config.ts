@@ -7,7 +7,7 @@ export default {
   component: Layout,
   redirect: "/cache_config",
   meta: {
-    icon: "homeFilled",
+    icon: "octicon:cache-16",
     title: $t("menus.hscache_config"),
     rank: 0
   },
