@@ -33,6 +33,15 @@
           </el-col>
         </el-row>
       </el-card>
+      <el-pagination
+        background
+        layout="prev, pager, next,jumper"
+        v-model:current-page="queryParam.pageParam.pageNo"
+        v-model:page-size="queryParam.pageParam.pageSize"
+        @size-change="refresh"
+        @current-change="refresh"
+        :total="total"
+      />
     </el-space>
   </div>
 </template>
@@ -57,13 +66,22 @@ use([CanvasRenderer, TitleComponent, TooltipComponent, LegendComponent]);
 // provide(THEME_KEY, "dark");
 
 const chartOptions = ref([]);
+const total = ref(0);
+const queryParam = ref({
+  pageParam: {
+    pageNo: 1,
+    pageSize: 4
+  }
+});
 
 const refreshing = ref(false);
 
 const refresh = async () => {
+  chartOptions.value = [];
   refreshing.value = true;
-  const r = await listSQL({ pageParam: {} });
+  const r = await listSQL(queryParam.value);
   const { data } = r;
+  total.value = data.total;
   refreshing.value = false;
   data.list.forEach(metric_result => {
     const durationChartOption = {
@@ -75,9 +93,7 @@ const refresh = async () => {
         trigger: "axis"
       },
       legend: {
-        data: ["avg", "min", "max"],
-        height: 300,
-        width: 300
+        data: ["avg", "min", "max"]
       },
       grid: {
         left: "3%",
@@ -102,21 +118,18 @@ const refresh = async () => {
         {
           name: "avg",
           type: "line",
-          stack: "Total",
           data: metric_result.avgDurations,
           smooth: true
         },
         {
           name: "min",
           type: "line",
-          stack: "Total",
           data: metric_result.minDurations,
           smooth: true
         },
         {
           name: "max",
           type: "line",
-          stack: "Total",
           data: metric_result.maxDurations,
           smooth: true
         }
@@ -157,14 +170,12 @@ const refresh = async () => {
         {
           name: "总次数",
           type: "line",
-          stack: "Total",
           data: metric_result.execCounts,
           smooth: true
         },
         {
           name: "缓存命中次数",
           type: "line",
-          stack: "Total",
           data: metric_result.cacheHitCounts,
           smooth: true
         }
