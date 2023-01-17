@@ -1,12 +1,32 @@
 <template>
   <div>
     <div class="w-full">
-      <el-button
-        type="primary"
-        :icon="useRenderIcon(Refresh)"
-        :loading="refreshing"
-        @click="refresh"
-      />
+      <el-form
+        ref="formRef"
+        :inline="true"
+        :model="queryParam"
+        class="bg-bg_color w-[99/100] pl-8 pt-4"
+      >
+        <el-form-item label="SQL" prop="sql">
+          <el-input
+            v-model="queryParam.sql"
+            @keydown.enter="refresh"
+            placeholder="请输入要查询的SQL,支持模糊匹配"
+            clearable
+            class="!w-[800px]"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(Search)"
+            :loading="refreshing"
+            @click="refresh"
+          >
+            搜索
+          </el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <el-space wrap>
       <el-card
@@ -37,25 +57,33 @@
           </el-col>
         </el-row>
       </el-card>
-      <el-pagination
-        background
-        layout="prev, pager, next,jumper"
-        v-model:current-page="queryParam.pageParam.pageNo"
-        v-model:page-size="queryParam.pageParam.pageSize"
-        @size-change="refresh"
-        @current-change="refresh"
-        :total="total"
-      />
     </el-space>
+    <el-row>
+      <el-col :span="12" />
+      <el-col :span="12">
+        <el-pagination
+          style="margin-top: 5px"
+          background
+          layout="prev, pager, next,jumper"
+          v-model:current-page="queryParam.pageParam.pageNo"
+          v-model:page-size="queryParam.pageParam.pageSize"
+          @size-change="refresh"
+          @current-change="refresh"
+          :total="total"
+        />
+      </el-col>
+    </el-row>
     <dialogForm v-model:visible="editFormDialogVisible" :data="editFormData" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import Refresh from "@iconify-icons/ep/refresh";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { listSQL } from "@/api/metric";
+import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import dialogForm from "@/views/cache_config/DialogForm.vue";
+import { useCacheConfig } from "@/views/cache_config/hook";
 import { Setting } from "@element-plus/icons-vue";
+import Search from "@iconify-icons/ep/search";
 import {
   LegendComponent,
   TitleComponent,
@@ -65,8 +93,6 @@ import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { ref } from "vue";
 import VChart from "vue-echarts";
-import dialogForm from "@/views/cache_config/DialogForm.vue";
-import { useCacheConfig } from "@/views/cache_config/hook";
 
 use([CanvasRenderer, TitleComponent, TooltipComponent, LegendComponent]);
 
@@ -84,7 +110,8 @@ const queryParam = ref({
   pageParam: {
     pageNo: 1,
     pageSize: 4
-  }
+  },
+  sql: ""
 });
 
 const refreshing = ref(false);
