@@ -95,7 +95,7 @@ const rules = {
 <template>
   <el-dialog
     v-model="formVisible"
-    title="新建产品"
+    title="添加缓存配置"
     :width="680"
     draggable
     :before-close="closeDialog"
