@@ -28,7 +28,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-space wrap>
+    <el-space>
       <el-card
         class="box-card"
         shadow="never"
@@ -47,7 +47,7 @@
             />
           </div>
         </template>
-        <el-row :gutter="20">
+        <el-row>
           <el-col :span="24">
             <v-chart class="chart" :option="option.durationChartOption" />
           </el-col>
@@ -253,9 +253,9 @@ refresh();
 }
 
 .box-card {
-  width: 800px;
+  width: 400px;
   height: 600px;
-  margin: 10px 0 0 10px;
+  margin: 10px 13px 0 0px;
   border: 1px solid transparent;
 }
 
