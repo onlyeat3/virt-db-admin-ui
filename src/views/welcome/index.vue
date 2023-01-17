@@ -66,10 +66,10 @@
       </el-card>
     </el-space>
     <el-row>
-      <el-col :span="12" />
-      <el-col :span="12">
+      <el-col :span="16" />
+      <el-col :span="8">
         <el-pagination
-          style="margin-top: 5px"
+          style="margin-top: 10px"
           background
           layout="prev, pager, next,jumper"
           v-model:current-page="queryParam.pageParam.pageNo"
