@@ -20,7 +20,11 @@
             <div style="font-size: 12px; margin-right: 10px">
               {{ option.durationChartOption.sqlStr }}
             </div>
-            <el-button type="primary" :icon="Setting" />
+            <el-button
+              type="primary"
+              :icon="Setting"
+              @click="handleAddCacheConfig(option.durationChartOption.sqlStr)"
+            />
           </div>
         </template>
         <el-row :gutter="20">
@@ -43,6 +47,7 @@
         :total="total"
       />
     </el-space>
+    <dialogForm v-model:visible="editFormDialogVisible" :data="editFormData" />
   </div>
 </template>
 
@@ -60,10 +65,18 @@ import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { ref } from "vue";
 import VChart from "vue-echarts";
+import dialogForm from "@/views/cache_config/DialogForm.vue";
+import { useCacheConfig } from "@/views/cache_config/hook";
 
 use([CanvasRenderer, TitleComponent, TooltipComponent, LegendComponent]);
 
 // provide(THEME_KEY, "dark");
+
+const { editFormDialogVisible, editFormData, handleUpdate } = useCacheConfig();
+
+const handleAddCacheConfig = sql => {
+  handleUpdate({ sql_template: sql, enabled: 1 });
+};
 
 const chartOptions = ref([]);
 const total = ref(0);
