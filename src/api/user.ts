@@ -28,6 +28,17 @@ export type RefreshTokenResult = {
   };
 };
 
+export type PasswordUpdateParam = {
+  currentPassword: string;
+  newPassword: string;
+  newPasswordConfirm: string;
+};
+
+export type PasswordUpdateResult = {
+  success: boolean;
+  data: string;
+};
+
 /** 登录 */
 export const getLogin = (data?: object) => {
   return http.request<UserResult>("post", "/login", { data });
@@ -36,4 +47,11 @@ export const getLogin = (data?: object) => {
 /** 刷新token */
 export const refreshTokenApi = (data?: object) => {
   return http.request<RefreshTokenResult>("post", "/refreshToken", { data });
+};
+
+/** 修改密码 */
+export const updatePasswordApi = (data?: PasswordUpdateParam) => {
+  return http.request<PasswordUpdateResult>("post", "/update_password", {
+    data
+  });
 };

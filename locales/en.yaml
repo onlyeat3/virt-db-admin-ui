@@ -1,5 +1,6 @@
 buttons:
   hsLoginOut: LoginOut
+  hsUpdatePassword: Update Password
   hsfullscreen: FullScreen
   hsexitfullscreen: ExitFullscreen
   hsrefreshRoute: RefreshRoute
@@ -42,3 +43,8 @@ login:
   usernameReg: Please enter username
   passwordReg: Please enter password
   passwordRuleReg: The password format should be any combination of 8-18 digits
+validate:
+  currentPassword: Please enter current password
+  newPassword: Please enter new password
+  newPasswordConfirm: Please enter new password again
+  newPasswordConfirmNotValid: The new password entered twice is different

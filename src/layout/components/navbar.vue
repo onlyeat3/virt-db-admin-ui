@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { reactive, ref } from "vue";
 import globalization from "@/assets/svg/globalization.svg?component";
 import { useNav } from "@/layout/hooks/useNav";
 import Check from "@iconify-icons/ep/check";
@@ -8,6 +9,21 @@ import Search from "./search/index.vue";
 import Breadcrumb from "./sidebar/breadCrumb.vue";
 import mixNav from "./sidebar/mixNav.vue";
 import topCollapse from "./sidebar/topCollapse.vue";
+import { IconifyIconOffline, IconifyIconOnline } from "@/components/ReIcon";
+import {
+  FormInstance,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElDialog,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElButton,
+  FormRules
+} from "element-plus";
+import { PasswordUpdateParam, updatePasswordApi } from "@/api/user";
+import { transformI18n, $t } from "@/plugins/i18n";
 
 const {
   layout,
@@ -22,6 +38,93 @@ const {
 } = useNav();
 
 const { t, locale, translationCh, translationEn } = useTranslationLang();
+
+const passwordUpdateFormRef = ref<FormInstance>();
+const passwordUpdateDialogForm = ref<PasswordUpdateParam>({
+  currentPassword: "",
+  newPassword: "",
+  newPasswordConfirm: ""
+});
+const passwordUpdateDialogVisiable = ref(false);
+const handleOpenUpdatePasswordDialog = () => {
+  passwordUpdateDialogVisiable.value = true;
+};
+
+const resetForm = () => {
+  if (!passwordUpdateFormRef.value) {
+    return;
+  }
+  passwordUpdateFormRef.value.resetFields();
+};
+
+const whenUpdatePasswordDialogClosing = () => {
+  resetForm();
+  passwordUpdateDialogVisiable.value = false;
+};
+const handleUpdatePassword = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate(valid => {
+    if (valid) {
+      updatePasswordApi(passwordUpdateDialogForm.value).then(result => {
+        if (result.success) {
+          passwordUpdateDialogVisiable.value = false;
+          resetForm();
+        }
+      });
+    }
+  });
+};
+
+/** 密码正则（密码格式应为8-18位数字、字母、符号的任意两种组合） */
+const REGEXP_PWD =
+  /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)]|[()])+$)(?!^.*[\u4E00-\u9FA5].*$)([^(0-9a-zA-Z)]|[()]|[a-z]|[A-Z]|[0-9]){8,18}$/;
+
+/** 登录校验 */
+const passwordUpdateFormRules = reactive<FormRules>({
+  currentPassword: [
+    {
+      required: true,
+      message: transformI18n($t("validate.currentPassword")),
+      trigger: "blur"
+    }
+  ],
+  newPassword: [
+    {
+      validator: (rule, value, callback) => {
+        if (value === "") {
+          callback(new Error(transformI18n($t("validate.newPassword"))));
+        } else if (!REGEXP_PWD.test(value)) {
+          callback(new Error(transformI18n($t("login.passwordRuleReg"))));
+        } else {
+          callback();
+        }
+      },
+      trigger: "blur"
+    }
+  ],
+  newPasswordConfirm: [
+    {
+      required: true,
+      message: transformI18n($t("validate.newPasswordConfirm")),
+      trigger: "blur"
+    },
+    {
+      required: true,
+      trigger: "blur",
+      validator: (rule, value, callback) => {
+        if (value === "") {
+          callback(new Error(transformI18n($t("validate.newPasswordConfirm"))));
+        } else if (value != passwordUpdateDialogForm.value.newPassword) {
+          callback(
+            new Error(transformI18n($t("validate.newPasswordConfirmNotValid")))
+          );
+        } else {
+          callback();
+        }
+      }
+    }
+  ]
+});
 </script>
 
 <template>
@@ -89,7 +192,14 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
           <p v-if="username" class="dark:text-white">{{ username }}</p>
         </span>
         <template #dropdown>
-          <el-dropdown-menu class="logout">
+          <el-dropdown-menu class="navbar-dropdown-menu">
+            <el-dropdown-item @click="handleOpenUpdatePasswordDialog">
+              <IconifyIconOnline
+                icon="ri:lock-password-line"
+                style="margin: 5px"
+              />
+              {{ t("buttons.hsUpdatePassword") }}
+            </el-dropdown-item>
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
                 :icon="LogoutCircleRLine"
@@ -104,6 +214,50 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
         <IconifyIconOffline :icon="Setting" />
       </span> -->
     </div>
+    <el-dialog
+      :before-close="whenUpdatePasswordDialogClosing"
+      v-model="passwordUpdateDialogVisiable"
+      title="修改密码"
+      :width="480"
+      draggable
+    >
+      <el-form
+        ref="passwordUpdateFormRef"
+        :model="passwordUpdateDialogForm"
+        :rules="passwordUpdateFormRules"
+        label-width="100px"
+      >
+        <el-form-item label="当前密码" prop="currentPassword">
+          <el-input
+            type="password"
+            v-model="passwordUpdateDialogForm.currentPassword"
+          />
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input
+            type="password"
+            v-model="passwordUpdateDialogForm.newPassword"
+          />
+        </el-form-item>
+        <el-form-item label="确认密码" prop="newPasswordConfirm">
+          <el-input
+            type="password"
+            v-model="passwordUpdateDialogForm.newPasswordConfirm"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="whenUpdatePasswordDialogClosing">取消</el-button>
+          <el-button
+            type="primary"
+            @click="handleUpdatePassword(passwordUpdateFormRef)"
+          >
+            确定
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -171,7 +325,7 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
   }
 }
 
-.logout {
+.navbar-dropdown-menu {
   max-width: 120px;
 
   ::v-deep(.el-dropdown-menu__item) {
