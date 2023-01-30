@@ -44,18 +44,12 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm build
-      - name: Zip the Build
-        run: |
-          pwd
-          ls -al
-          sudo zip dist.zip -r dist
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: dist.zip
+          name: dist
           path: |
-            dist.zip
+            dist
 
   release:
     name: Create Github Release
@@ -68,9 +62,15 @@ jobs:
         with:
           path: ./artifacts
       - name: Display structure of downloaded files
-        run: ls -alh && file dist.zip
+        run: ls -alh
         working-directory: ./artifacts
-
+      - name: Zip the Build
+        working-directory: ./artifacts
+        run: |
+          pwd
+          ls -al
+          sudo zip dist.zip -r dist
+          rm -rf dist
       - name: Get Tag Name
         id: tag_name
         run: echo "::set-output name=tag_name::$(a=$(git rev-parse --abbrev-ref HEAD) && echo ${a/#release\/})"
