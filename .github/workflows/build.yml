@@ -44,16 +44,10 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm build
-      - name: Zip the Build
-        run: |
-          pwd
-          ls -al
-          sudo zip dist.zip -r dist
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: dist
+          name: dist.zip
           path: |
             ./dist
 
@@ -85,4 +79,4 @@ jobs:
           body: Release ${{ steps.tag_name.outputs.tag_name }}
           draft: false
           prerelease: false
-          asset_files: "./artifacts"
+          asset_files: "./artifacts/dist.zip"
