@@ -55,7 +55,7 @@ jobs:
         with:
           name: dist.zip
           path: |
-            ./dist.zip
+            dist.zip
 
   release:
     name: Create Github Release
@@ -68,7 +68,7 @@ jobs:
         with:
           path: ./artifacts
       - name: Display structure of downloaded files
-        run: ls -alh
+        run: ls -alh && file dist.zip
         working-directory: ./artifacts
 
       - name: Get Tag Name
