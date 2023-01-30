@@ -62,14 +62,16 @@ export function useCacheConfig() {
           text = scope.row.sql_template.slice(0, 80) + "...";
         }
 
+        const tooltip_content =
+          "<div style='max-width:500px;'>" + scope.row.sql_template + "</div>";
         return (
           <el-tooltip
-            class="box-item"
             effect="dark"
-            content={scope.row.sql_template}
+            content={tooltip_content}
+            raw-content
             placement="top-start"
           >
-            <div style="min-width:100px;">{text}</div>
+            {text}
           </el-tooltip>
         );
       }
